@@ -19,7 +19,12 @@ module LinkedIn
       end
 
       def company(options = {})
-        path   = company_path(options)
+        path = company_path(options)
+        simple_query(path, options)
+      end
+
+      def company_statistics(options = {})
+        path = company_statistics_path(options)
         simple_query(path, options)
       end
 
@@ -87,9 +92,16 @@ module LinkedIn
           end
         end
 
+        def company_statistics_path(options)
+          path = "/companies/"
+          if id = options.delete(:id)
+            path += "#{id}"
+          end
+          path += "/company-statistics"
+        end
+
         def company_path(options)
           path = "/companies"
-          
           if domain = options.delete(:domain)
             path += "?email-domain=#{CGI.escape(domain)}"
           elsif id = options.delete(:id)
